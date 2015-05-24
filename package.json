@@ -1,0 +1,17 @@
+{
+  "name": "scheduler-node",
+  "version": "1.0.0",
+  "description": "Scheduler backend to monitor a Firebase application",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Neil Joshi",
+  "license": "Copyright",
+  "dependencies": {
+    "body-parser": "^1.12.4",
+    "express": "^4.12.4",
+    "firebase": "^2.2.5",
+    "twilio": "^2.2.0"
+  }
+}

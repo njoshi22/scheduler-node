@@ -1,33 +1,43 @@
 var express = require('express');
 var Firebase = require('firebase');
 var twilio = require('twilio'),
-    client = twilio('AC78f17d46e4c8026691c6911fc7ff4f6a','7d65ecfa2421f3d31f75be40548cfebe');
+client = twilio('AC78f17d46e4c8026691c6911fc7ff4f6a','7d65ecfa2421f3d31f75be40548cfebe');
 
 var app = express();
 
 var fb = new Firebase('https://eatery.firebaseio.com/'),
-    usersRef = fb.child('users');
+usersRef = fb.child('users');
 
 app.get('/', function(req,res) {
   res.send('Hello!');
 });
 
 app.get('/users', function(req,res) { //do stuff when users load the '/' route
+  fb.authWithPassword({
+    email: "njoshi22@gmail.com",
+    password: "ajinkya1"
+  }, function(err,authData) {
+    if(err) {
+      console.log("Login failed.", err);
+    } else {
+      console.log("Login successful.");
 
-  //send firebase data when get request received
-  usersRef.once('value', function(mainSnap) {
-    var arr =  [];
-    mainSnap.forEach(function(child) {
-      arr.push({
-        name: child.val().name,
-        dob: child.val().dob
+      //send firebase data when get request received
+      usersRef.once('value', function(mainSnap) {
+        var arr =  [];
+        mainSnap.forEach(function(child) {
+          arr.push({
+            name: child.val().name,
+            dob: child.val().dob
+          });
+        });
+        res.send(JSON.stringify(arr));
       });
-    });
-    res.send(JSON.stringify(arr));
+  }
   });
 });
 
-var port = process.ENV.port || 1337;
+var port = process.env.port || 1337;
 
 var server = app.listen(port, function() {
   var host = server.address().address;

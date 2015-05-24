@@ -6,7 +6,14 @@ client = twilio('AC78f17d46e4c8026691c6911fc7ff4f6a','7d65ecfa2421f3d31f75be4054
 var app = express();
 
 var fb = new Firebase('https://eatery.firebaseio.com/'),
-usersRef = fb.child('users');
+usersRef = fb.child('users'),
+restRef = fb.child('restaurants');
+
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 
 app.get('/', function(req,res) {
   res.send('Hello!');
@@ -29,6 +36,31 @@ app.get('/users', function(req,res) { //do stuff when users load the '/' route
           arr.push({
             name: child.val().name,
             dob: child.val().dob
+          });
+        });
+        res.send(JSON.stringify(arr));
+      });
+  }
+  });
+});
+
+app.get('/restaurants', function(req,res) { //do stuff when users load the '/' route
+  fb.authWithPassword({
+    email: "njoshi22@gmail.com",
+    password: "ajinkya1"
+  }, function(err,authData) {
+    if(err) {
+      console.log("Login failed.", err);
+    } else {
+      console.log("Login successful.");
+
+      //send firebase data when get request received
+      restRef.once('value', function(mainSnap) {
+        var arr =  [];
+        mainSnap.forEach(function(child) {
+          arr.push({
+            name: child.val().name,
+            cuisine: child.val().cuisine
           });
         });
         res.send(JSON.stringify(arr));

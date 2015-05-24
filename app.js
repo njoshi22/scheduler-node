@@ -33,10 +33,7 @@ app.get('/users', function(req,res) { //do stuff when users load the '/' route
       usersRef.once('value', function(mainSnap) {
         var arr =  [];
         mainSnap.forEach(function(child) {
-          arr.push({
-            name: child.val().name,
-            dob: child.val().dob
-          });
+          arr.push(child.val());
         });
         res.send(JSON.stringify(arr));
       });
@@ -58,10 +55,7 @@ app.get('/restaurants', function(req,res) { //do stuff when users load the '/' r
       restRef.once('value', function(mainSnap) {
         var arr =  [];
         mainSnap.forEach(function(child) {
-          arr.push({
-            name: child.val().name,
-            cuisine: child.val().cuisine
-          });
+          arr.push(child.val());
         });
         res.send(JSON.stringify(arr));
       });

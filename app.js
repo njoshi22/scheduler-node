@@ -27,7 +27,9 @@ app.get('/users', function(req,res) { //do stuff when users load the '/' route
   });
 });
 
-var server = app.listen(3000, function() {
+var port = process.ENV.port || 1337;
+
+var server = app.listen(port, function() {
   var host = server.address().address;
   var port = server.address().port;
   console.log('Listening at %s:%s', host, port);
